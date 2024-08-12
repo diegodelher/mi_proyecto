@@ -223,22 +223,7 @@ import os
 app = Flask(__name__)
 
 # Configuración de las credenciales de Google Cloud
-credentials_url = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
-
-if credentials_url:
-    # Descargar el archivo JSON desde la URL pública
-    response = requests.get(credentials_url)
-    response.raise_for_status()  # Lanza una excepción si la descarga falla
-
-    # Guardar el archivo en el sistema de archivos local temporalmente
-    with open('credentials.json', 'wb') as f:
-        f.write(response.content)
-
-    # Configuración de las credenciales
-    credentials = service_account.Credentials.from_service_account_file('credentials.json')
-else:
-    # Usa el archivo local si ya está disponible (opcional)
-    credentials = service_account.Credentials.from_service_account_file('credentials.json')
+credentials = service_account.Credentials.from_service_account_file('solar-virtue-432107-n3-ddebe8916ccf.json')
 
 client = vision.ImageAnnotatorClient(credentials=credentials)
 
@@ -366,7 +351,6 @@ def search_google_images(query, api_key, search_engine_id):
     else:
         return []
 
-
 @app.route('/download/<path:url>')
 def download(url):
     try:
@@ -384,5 +368,4 @@ def download(url):
         return f"Error al descargar la imagen: {str(e)}", 500
 
 if __name__ == '__main__':
-        app.run(host='0.0.0.0', port=int(os.getenv('PORT', 5000)), debug=True)
-
+    app.run(host='0.0.0.0', port=int(os.getenv('PORT', 5000)), debug=True)
