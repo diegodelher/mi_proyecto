@@ -222,14 +222,29 @@ import os
 
 app = Flask(__name__)
 
-# Configuración de la API de Google Cloud Vision
-API_KEY_PATH = 'C:\\Users\\diego\\keys\\solar-virtue-432107-n3-ddebe8916ccf.json'
-credentials = service_account.Credentials.from_service_account_file(API_KEY_PATH)
+# Configuración de las credenciales de Google Cloud
+credentials_url = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+
+if credentials_url:
+    # Descargar el archivo JSON desde la URL pública
+    response = requests.get(credentials_url)
+    response.raise_for_status()  # Lanza una excepción si la descarga falla
+
+    # Guardar el archivo en el sistema de archivos local temporalmente
+    with open('credentials.json', 'wb') as f:
+        f.write(response.content)
+
+    # Configuración de las credenciales
+    credentials = service_account.Credentials.from_service_account_file('credentials.json')
+else:
+    # Usa el archivo local si ya está disponible (opcional)
+    credentials = service_account.Credentials.from_service_account_file('credentials.json')
+
 client = vision.ImageAnnotatorClient(credentials=credentials)
 
 # Configuración de la Google Custom Search API
-api_key = 'AIzaSyDttGl8wRV_m2LQwdRlrcuqws284jnteBo'
-search_engine_id = '6456661277fa84cd1'
+api_key = os.getenv('GOOGLE_API_KEY')
+search_engine_id = os.getenv('GOOGLE_SEARCH_ENGINE_ID')
 
 # Configuración de logging
 logging.basicConfig(level=logging.INFO)
@@ -346,12 +361,12 @@ def search_google_images(query, api_key, search_engine_id):
                 'snippet': snippet,
                 'thumbnail': thumbnail
             })
-        print(f"Product Details: {product_details}")  # Añade este print para depuración
+        print(f"Product Details: {product_details}")
         return product_details
     else:
         return []
 
-
+        
 @app.route('/download/<path:url>')
 def download(url):
     try:
