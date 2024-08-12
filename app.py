@@ -366,7 +366,7 @@ def search_google_images(query, api_key, search_engine_id):
     else:
         return []
 
-        
+
 @app.route('/download/<path:url>')
 def download(url):
     try:
@@ -384,4 +384,5 @@ def download(url):
         return f"Error al descargar la imagen: {str(e)}", 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+        app.run(host='0.0.0.0', port=int(os.getenv('PORT', 5000)), debug=True)
+
