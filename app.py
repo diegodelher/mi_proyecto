@@ -211,6 +211,7 @@ def download(url):
 if __name__ == '__main__':
     app.run(debug=True)
 '''
+
 from flask import Flask, request, render_template, send_file
 from google.cloud import vision
 from google.oauth2 import service_account
@@ -223,7 +224,12 @@ import os
 app = Flask(__name__)
 
 # Configuración de las credenciales de Google Cloud
-credentials = service_account.Credentials.from_service_account_file('solar-virtue-432107-n3-ddebe8916ccf.json')
+credentials_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+
+if credentials_path:
+    credentials = service_account.Credentials.from_service_account_file(credentials_path)
+else:
+    raise Exception("La variable de entorno GOOGLE_APPLICATION_CREDENTIALS no está configurada.")
 
 client = vision.ImageAnnotatorClient(credentials=credentials)
 
@@ -243,20 +249,20 @@ def index():
 def upload():
     if 'file' not in request.files:
         return 'No file part', 400
-    
+
     file = request.files['file']
     if file.filename == '':
         return 'No selected file', 400
-    
+
     if file:
         image_content = file.read()
         similar_images = find_similar_images(image_content)
         product_details = detect_and_get_product_details(image_content)
         labels_and_objects = detect_labels_and_objects(image_content)
-        
+
         logger.info("Product Details in Upload Route: %s", product_details)
         logger.info("Labels and Objects: %s", labels_and_objects)
-        
+
         return render_template('results.html', similar_images=similar_images, 
                                product_details=product_details, 
                                labels_and_objects=labels_and_objects)
@@ -302,7 +308,7 @@ def detect_labels_and_objects(image_content):
         image = vision.Image(content=image_content)
         response = client.label_detection(image=image)
         labels = response.label_annotations
-        
+
         # Object Localization
         obj_response = client.object_localization(image=image)
         objects = obj_response.localized_object_annotations
@@ -356,12 +362,12 @@ def download(url):
     try:
         response = requests.get(url)
         response.raise_for_status()
-        
+
         img = Image.open(io.BytesIO(response.content))
         img_byte_arr = io.BytesIO()
         img.save(img_byte_arr, format='PNG')
         img_byte_arr.seek(0)
-        
+
         return send_file(img_byte_arr, mimetype='image/png', as_attachment=True, download_name='image.png')
     except requests.exceptions.RequestException as e:
         logger.error("Error downloading the image: %s", e)
