@@ -1,0 +1,454 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+/* Fondo de la página */
+body {
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* Fondo con imagen oscurecida */
+.bg-dark-image {
+    background-image: url('/static/fondo_pag.png'); /* Ruta de tu imagen */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    height: 100vh; /* Ocupa toda la altura de la ventana */
+}
+
+.bg-dark-image::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* Color negro con 40% de opacidad para oscurecer la imagen */
+    z-index: 1; /* Asegura que el overlay esté encima de la imagen de fondo */
+}
+
+/* Fondo azul tenue */
+.bg-light-blue {
+    background-color: #f0f8ff; /* Azul tenue */
+    height: 100vh; /* Ocupa toda la altura de la ventana */
+}
+
+
+/* Capa de superposición oscura */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* Color negro con 40% de opacidad */
+    z-index: 2; /* Asegura que el overlay esté encima de la imagen de fondo */
+}
+
+/* Asegúrate de que el contenido esté encima del overlay */
+.form-container {
+    position: relative;
+    z-index: 3; /* Asegura que el contenido esté encima del overlay */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    padding: 20px;
+    width: 90%;
+    max-width: 600px; /* Ancho máximo para pantallas grandes */
+}
+
+
+/* Estilo para el encabezado */
+h1 {
+    font-size: 2.5em;
+    color: #fff;
+    padding: 20px;
+    background-color: #007BFF;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 4; /* Asegura que el encabezado esté encima de todo */
+}
+
+/* Estilo para el contenedor del formulario */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 20px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+img#preview {
+    margin-top: 10px;
+    max-width: 100%;
+    height: 200px;
+    margin-bottom: 40px;
+}
+
+/* Estilo para la entrada de archivo */
+.file-input {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    margin-bottom: 50px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.file-input:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+/* Estilos para mostrar el texto del archivo seleccionado */
+.file-input::after {
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Estilos para mostrar el nombre del archivo seleccionado */
+.file-input:valid + .file-label::after {
+    content: attr(data-file-name);
+}
+
+/* Estilo para el botón de subida */
+.upload-button {
+    background-color: #0056b3;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 5px;
+    border: none;
+    font-size: 1.2em; /* Aumenta el tamaño del botón */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.upload-button:hover {
+    background-color: #003d7a;
+}
+
+/* Estilo para el texto del formulario */
+.file-label {
+    display: block;
+    font-size: 30px; /* Aumenta el tamaño del texto */
+    margin-bottom: 100px;
+    color: white;
+}
+
+/* Estilo para el formulario */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Estilo para el botón de enviar */
+input[type="submit"] {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Estilo para el contenedor de resultados */
+.results-container {
+    padding: 20px;
+}
+
+/* Estilo para los títulos en la página de resultados */
+.results-container h1 {
+    font-size: 2.5em;
+    color: #333; /* Color de texto oscuro */
+    margin: 20px 0;
+}
+
+/* Estilo para los elementos de la lista */
+ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+li {
+    text-align: center;
+    width: 220px; /* Ajusta el ancho de los elementos de la lista para un diseño uniforme */
+}
+
+li img {
+    width: 200px; /* Tamaño fijo para las imágenes */
+    height: 200px; /* Tamaño fijo para las imágenes */
+    object-fit: cover; /* Ajusta la imagen para cubrir el área del contenedor sin deformarla */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+a {
+    display: block;
+    margin-top: 5px;
+    color: #007BFF;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Estilo general para enlaces */
+a {
+    color: #1e00ff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #3a64ce;
+}
+
+/* Estilo para el botón "Visitar Sitio" */
+.visit-button {
+    display: inline-block;
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.visit-button:hover {
+    background-color: #218838;
+}
+
+
+/* General button styling */
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    border-radius: 5px;
+    border: 2px solid transparent;
+    transition: background-color 0.3s, border-color 0.3s, transform 0.2s;
+}
+
+/* Specific styles for upload button */
+.upload-button {
+    background-color: #007bff; /* Blue background */
+    border-color: #007bff; /* Blue border */
+}
+
+.upload-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    border-color: #0056b3; /* Darker blue border on hover */
+}
+
+/* Estilo general para el botón de descarga */
+/* Estilo general para el botón de descarga */
+.download-button {
+    background-color: #28a745; /* Fondo verde */
+    border: 1px solid #28a745; /* Borde verde */
+    color: white; /* Texto blanco */
+    text-decoration: none; /* Sin subrayado */
+    padding: 10px 15px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    display: inline-block; /* Asegura que el botón se alinee con otros elementos */
+    font-size: 14px; /* Tamaño del texto */
+    text-align: center; /* Centra el texto dentro del botón */
+}
+
+/* Estilo del botón al pasar el ratón */
+.download-button:hover {
+    background-color: #218838; /* Verde más oscuro al pasar el ratón */
+    border-color: #1e7e34; /* Borde verde más oscuro al pasar el ratón */
+    text-decoration: none; /* Asegura que no haya subrayado al pasar el ratón */
+    color: white; /* Texto blanco al pasar el ratón */
+}
+
+/* Asegúrate de que no haya cambios en el estado de enfoque o activación */
+.download-button:focus, .download-button:active {
+    text-decoration: none; /* Sin subrayado al hacer clic */
+    color: white; /* Texto blanco al hacer clic */
+}
+
+
+
+.download-button a {
+    color: white; /* Texto blanco */
+    text-decoration: none; /* Sin subrayado */
+}
+
+.download-button a:hover {
+    color: white; /* Texto blanco al pasar el ratón */
+    text-decoration: none; /* Sin subrayado al pasar el ratón */
+}
+
+
+
+.page-link {
+    background-color: #dc3545; /* Red background */
+    border-color: #dc3545; /* Red border */
+}
+
+.page-link:hover {
+    background-color: #c82333; /* Darker red on hover */
+    border-color: #bd2130; /* Darker red border on hover */
+}
+
+@media (max-width: 768px) {
+    .form-container {
+        width: 90%;
+        margin: 0 auto;
+    }
+    
+    .results-container img {
+        max-width: 80px;
+    }
+}
+
+.button {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button:hover {
+    transform: scale(1.05);
+}
+
+
+.detection-results h3 {
+    font-size: 18px;
+    color: #333;
+}
+
+.detection-results ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.detection-results li {
+    padding: 15px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.detection-results li:last-child {
+    border-bottom: none;
+}
+
+.image-list, .details-list, .detection-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.image-list li, .details-list li, .detection-list li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.image-list img {
+    max-width: 200px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.detection-results {
+    margin-top: 0px;
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+.detection-list li {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+}
+
+.detection-title {
+    font-weight: bold;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.detection-score {
+    font-size: 0.9em;
+    color: #666;
+}
+
+#loading {
+    text-align: center;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.results-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.result-item {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    max-width: 300px;
+    margin: 1rem;
+    text-align: center;
+}
+.result-item img {
+    max-width: 100%;
+    border-radius: 8px;
+}
+.result-item h3 {
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+}
+.result-item a {
+    color: #007bff;
+    text-decoration: none;
+}
+.result-item a:hover {
+    text-decoration: underline;
+}

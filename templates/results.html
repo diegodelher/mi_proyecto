@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de la Búsqueda</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg-light-blue">
+    <h1>Resultados de la Búsqueda</h1>
+
+    <a href="/" class="button upload-button"><i class="fas fa-upload"></i> Subir otra Imagen</a>
+
+    <div class="results-container">
+        <h2>Imágenes Similares</h2>
+        <ul class="image-list">
+            {% if similar_images %}
+            {% for image in similar_images %}
+                <div class="result-item">
+                    <img src="{{ image.image_url }}" alt="Imagen Similar">
+                    <p><a href="{{ image.page_url }}" target="_blank">Ver en página</a></p>
+                    <p><a href="/download/{{ image.image_url }}" class="button download-button" download>Descargar</a></p>
+
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No se encontraron imágenes similares.</p>
+        {% endif %}
+        </ul>
+
+    <!--
+        {% if product_details %}
+        <h2>Detalles de Productos Reconocidos</h2>
+        <ul class="details-list">
+            {% for detail in product_details %}
+            <li>
+                <strong>{{ detail.title }}</strong><br>
+                <a href="{{ detail.link }}" target="_blank">Ver en Google</a><br>
+                <p>{{ detail.snippet }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No se encontraron detalles de productos. Verifica los logs para más detalles.</p>
+        {% endif %}
+    -->
+
+        <h2>Etiquetas y Objetos Detectados</h2>
+        <div class="detection-results">
+            <div class="section">
+                <h3>Etiquetas Detectadas</h3>
+                <ul class="detection-list">
+                    {% for label in labels_and_objects.labels %}
+                    <li>
+                        <span class="detection-title">{{ label.description }}</span>
+                        <span class="detection-score">({{ label.score | round(2) }})</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="section">
+                <h3>Objetos Detectados</h3>
+                <ul class="detection-list">
+                    {% for obj in labels_and_objects.objects %}
+                    <li>
+                        <span class="detection-title">{{ obj.name }}</span>
+                        <span class="detection-score">({{ obj.score | round(2) }})</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div id="loading" style="display:none;">Cargando...</div>
+
+        <script>
+            document.querySelector('form').addEventListener('submit', function() {
+                document.getElementById('loading').style.display = 'block';
+            });
+        </script>
+    </div>
+</body>
+</html>
+
+

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Búsqueda de Imágenes Similares</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg-dark-image">
+    <h1>Reconocimiento de Imágenes</h1>
+    <div class="overlay"></div>
+    <div class="form-container">
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <label for="file" class="file-label">Selecciona un archivo:</label>
+            <input type="file" name="file" id="file" accept="image/*" required class="file-input" onchange="previewImage()">
+            <img id="preview" src="" alt="Vista previa" style="display:none;">
+
+            <input type="submit" value="Subir Imágen" class="button download-button">
+        </form>
+    </div>
+    <script>
+        function previewImage() {
+            const file = document.getElementById('file').files[0];
+            const reader = new FileReader();
+            
+            reader.onloadend = function () {
+                const preview = document.getElementById('preview');
+                preview.src = reader.result;
+                preview.style.display = 'block';
+            }
+            
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</body>
+</html>
